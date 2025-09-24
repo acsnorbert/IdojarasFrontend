@@ -1,0 +1,193 @@
+header {
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 4%;
+}
+
+footer p {
+    font-size: 80%;
+    letter-spacing: 3px;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+footer {
+    border-top: 1px solid var(--bs-secondary);
+    padding: 15px 0;
+}
+
+.hide {
+    display: none;
+}
+
+#themeSelector {
+    position: absolute;
+}
+
+main {
+    padding: 20px 16px;
+    border: 1px solid var(--bs-secondary);
+    border-top: none;
+    border-radius: 0px 0px 8px 8px;
+    
+}
+
+footer {
+    margin-top: 16px;
+}
+
+nav {
+    border: 1px solid var(--bs-secondary);
+    border-bottom: none;
+    border-radius: 8px 8px 0px 0px;
+}
+
+#getprofileBtn{
+    width: 40%;
+    margin: 0 auto;
+}
+
+
+#kilepesBtn:hover {
+    color: rgb(255, 0, 0);
+    text-shadow: 0px 0px 10px rgb(187, 27, 27);
+}
+
+#chart{
+    width: 80%;
+    height: 500px;
+}
+#appTitle{
+    width: 30%;
+    margin:0 auto;
+    padding-bottom: 2%;
+
+
+    
+}
+
+#author{
+    color:gray
+}
+#company{
+ font-style: italic;
+
+}
+
+/* Extrák */
+
+
+  
+/* Lábléc animáció */
+
+.container2 {
+    width: 200px;
+    height: 200px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  
+  .cloud {
+    width: 250px;
+  }
+  
+  .front {
+    padding-top: 45px;
+    margin-left: 25px;
+    display: inline;
+    position: absolute;
+    z-index: 11;
+    animation: clouds 8s infinite;
+    animation-timing-function: ease-in-out;
+  }
+  
+  .back {
+    margin-top: -30px;
+    margin-left: 150px;
+    z-index: 12;
+    animation: clouds 12s infinite;
+    animation-timing-function: ease-in-out;
+  }
+  
+  .right-front {
+    width: 45px;
+    height: 45px;
+    border-radius: 50% 50% 50% 0%;
+    background-color: #4c9beb;
+    display: inline-block;
+    margin-left: -25px;
+    z-index: 5;
+  }
+  
+  .left-front {
+    width: 65px;
+    height: 65px;
+    border-radius: 50% 50% 0% 50%;
+    background-color: #4c9beb;
+    display: inline-block;
+    z-index: 5;
+  }
+  
+  .right-back {
+    width: 50px;
+    height: 50px;
+    border-radius: 50% 50% 50% 0%;
+    background-color: #4c9beb;
+    display: inline-block;
+    margin-left: -20px;
+    z-index: 5;
+  }
+  
+  .left-back {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 0% 50%;
+    background-color: #4c9beb;
+    display: inline-block;
+    z-index: 5;
+  }
+  
+  .sun {
+    width: 120px;
+    height: 120px;
+    background: -webkit-linear-gradient(to right, #fcbb04, #fffc00);
+    background: linear-gradient(to right, #fcbb04, #fffc00);
+    border-radius: 60px;
+    display: inline;
+    position: absolute;
+  }
+  
+  .sunshine {
+    animation: sunshines 2s infinite;
+  }
+  
+  @keyframes sunshines {
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+  
+    100% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes clouds {
+    0% {
+      transform: translateX(15px);
+    }
+  
+    50% {
+      transform: translateX(0px);
+    }
+  
+    100% {
+      transform: translateX(15px);
+    }
+  }
+  
