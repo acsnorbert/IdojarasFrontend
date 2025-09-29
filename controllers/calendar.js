@@ -1,127 +1,63 @@
-/*let calEvents = [];
+let calYear, calMonth;
 
-async function getCalendarData(){
-    try{
-        let res = await fetch(`${ServerURL}/idojaras/users/${loggedUser.id}`);
-        idojarasok = await res.json();
-        calEvents = [];
-        idojarasok.forEach(idojaras => {
-            calEvents.push({
-                title  : 'Időjárás: ' + idojaras.idojarasAdat,
-                start  : idojaras.date
-              });
-        });
-      }catch(err){
-          console.log(err);
-          showMessage('danger', 'Hiba', 'Hiba az adatok lekérdezése során!'); 
-      }
+function initCalendar() {
+    const today = new Date();
+    calYear = today.getFullYear();
+    calMonth = today.getMonth();
+
+    document.getElementById('prevMonth').addEventListener('click', ()=>changeMonth(-1));
+    document.getElementById('nextMonth').addEventListener('click', ()=>changeMonth(1));
+
+    generateCalendar(calYear, calMonth);
 }
 
-function initCalendar(){
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-     
-        initialView: 'dayGridMonth',
-        locale: 'hu',
-        headerToolbar: {
-            left: 'prev,today,next',
-            center: 'title',
-            right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-        },
-        events: calEvents
+function changeMonth(delta){
+    calMonth += delta;
+    if(calMonth<0){ calMonth=11; calYear--; }
+    if(calMonth>11){ calMonth=0; calYear++; }
+    generateCalendar(calYear, calMonth);
+}
+
+function generateCalendar(year, month){
+    const calendarBody = document.getElementById('calendarBody');
+    const calendarHeader = document.getElementById('calendarHeader');
+    calendarBody.innerHTML = '';
+    calendarHeader.innerHTML = '';
+
+    const days = ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'];
+    days.forEach(day=>{
+        const th = document.createElement('th');
+        th.innerText = day;
+        calendarHeader.appendChild(th);
     });
-    calendar.render();
-}
-*/
 
+    const firstDay = new Date(year, month, 1);
+    let startDay = firstDay.getDay();
+    startDay = startDay === 0 ? 6 : startDay-1; // Hétfő=0
 
-/*  */
-window.onload = function () {
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+    let date = 1;
+    for(let i=0;i<6;i++){
+        const tr = document.createElement('tr');
+        for(let j=0;j<7;j++){
+            const td = document.createElement('td');
+            if(i===0 && j<startDay) td.innerHTML='';
+            else if(date>daysInMonth) td.innerHTML='';
+            else{
+                td.innerHTML = `<strong>${date}</strong><br>`;
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+                const dayData = idojaras.find(i => i.date===dateStr && i.userId===loggedUser.id);
+                if(dayData){
+                    td.innerHTML += `${dayData.minFok}°C - ${dayData.maxFok}°C<br>${dayData.idojarasAdat}`;
+                }
+                date++;
+            }
+            tr.appendChild(td);
+        }
+        calendarBody.appendChild(tr);
+    }
 
-var chart = new CanvasJS.Chart("chartContainer", {            
-	title:{
-		text: "Weekly Weather Forecast"              
-	},
-	axisY: {
-		suffix: " °C",
-		maximum: 40,
-		gridThickness: 0
-	},
-	toolTip:{
-		shared: true,
-		content: "{name} </br> <strong>Temperature: </strong> </br> Min: {y[0]} °C, Max: {y[1]} °C"
-	},
-	data: [{
-		type: "rangeSplineArea",
-		fillOpacity: 0.1,
-		color: "#91AAB1",
-		indexLabelFormatter: formatter,
-		dataPoints: [
-			{ label: "Monday", y: [15, 26], name: "rainy" },
-			{ label: "Tuesday", y: [15, 27], name: "rainy" },
-			{ label: "Wednesday", y: [13, 27], name: "sunny" },
-			{ label: "Thursday", y: [14, 27], name: "sunny" },
-			{ label: "Friday", y: [15, 26], name: "cloudy" },
-			{ label: "Saturday", y: [17, 26], name: "sunny" },
-			{ label: "Sunday", y: [16, 27], name: "rainy" }
-		]
-	}]
-});
-chart.render();
-
-var images = [];    
-
-addImages(chart);
-
-function addImages(chart) {
-	for(var i = 0; i < chart.data[0].dataPoints.length; i++){
-		var dpsName = chart.data[0].dataPoints[i].name;
-		if(dpsName == "cloudy"){
-			images.push($("<img>").attr("src", "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/cloudy.png"));
-		} else if(dpsName == "rainy"){
-		images.push($("<img>").attr("src", "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/rainy.png"));
-		} else if(dpsName == "sunny"){
-			images.push($("<img>").attr("src", "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/sunny.png"));
-		}
-
-	images[i].attr("class", dpsName).appendTo($("#chartContainer>.canvasjs-chart-container"));
-	positionImage(images[i], i);
-	}
-}
-
-function positionImage(image, index) {
-	var imageCenter = chart.axisX[0].convertValueToPixel(chart.data[0].dataPoints[index].x);
-	var imageTop =  chart.axisY[0].convertValueToPixel(chart.axisY[0].maximum);
-
-	image.width("40px")
-	.css({ "left": imageCenter - 20 + "px",
-	"position": "absolute","top":imageTop + "px",
-	"position": "absolute"});
-}
-
-$( window ).resize(function() {
-	var cloudyCounter = 0, rainyCounter = 0, sunnyCounter = 0;    
-	var imageCenter = 0;
-	for(var i=0;i<chart.data[0].dataPoints.length;i++) {
-		imageCenter = chart.axisX[0].convertValueToPixel(chart.data[0].dataPoints[i].x) - 20;
-		if(chart.data[0].dataPoints[i].name == "cloudy") {					
-			$(".cloudy").eq(cloudyCounter++).css({ "left": imageCenter});
-		} else if(chart.data[0].dataPoints[i].name == "rainy") {
-			$(".rainy").eq(rainyCounter++).css({ "left": imageCenter});  
-		} else if(chart.data[0].dataPoints[i].name == "sunny") {
-			$(".sunny").eq(sunnyCounter++).css({ "left": imageCenter});  
-		}                
-	}
-});
-
-function formatter(e) { 
-	if(e.index === 0 && e.dataPoint.x === 0) {
-		return " Min " + e.dataPoint.y[e.index] + "°";
-	} else if(e.index == 1 && e.dataPoint.x === 0) {
-		return " Max " + e.dataPoint.y[e.index] + "°";
-	} else{
-		return e.dataPoint.y[e.index] + "°";
-	}
-} 
-
+    // Hónap kijelzése
+    const monthNames = ['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'];
+    document.getElementById('currentMonth').innerText = `${monthNames[month]} ${year}`;
 }
